@@ -1,74 +1,131 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Alert, TextInput, Button, StyleSheet, SafeAreaView } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+export default function ViewComponent() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-export default function HomeScreen() {
+  const checkTrong = () => {
+    if (username && password) {
+      Alert.alert('Thông Báo', `Đăng nhập thành công!\nTên đăng nhập: ${username}, Mật khẩu: ${password}`);
+      setUsername('');
+      setPassword('');
+    } else {
+      Alert.alert('Thông Báo', 'Vui lòng điền đầy đủ thông tin!');
+    }
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <Text style={styles.text}>Đăng Nhập</Text>
+  
+        <TextInput
+          style={styles.input}
+          placeholder="Tài Khoản"
+          value={username}
+          onChangeText={setUsername}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+        <TextInput
+          style={styles.input}
+          placeholder="Mật Khẩu"
+          secureTextEntry={true}
+          value={password}
+          onChangeText={setPassword}
+        />
+        <View style={styles.button}>
+          <Button
+            color="#FF5733"
+            title="Nhấn vào đây"
+            onPress={checkTrong}
+          />
+        </View>
+        <Text
+          style={styles.text1}
+          onPress={() => Alert.alert('Thông Báo', 'Chuyển sang màn hình đăng ký')}
+        >
+          Chưa có tài khoản? Đăng ký Ngay
+        </Text>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  safeArea: {
+    flex: 1,
+    backgroundColor: 'black',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#5DADE2',
+    padding: 20,
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 8,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  text: {
+    fontSize: 28,
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 30,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  input: {
+    width: '90%',
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 15,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+    backgroundColor: '#ffffff',
+  },
+  button: {
+    width: '90%',
+    borderRadius: 8,
+    overflow: 'hidden',
+    marginBottom: 15,
+    backgroundColor: '#FF5733',
+    elevation: 5,
+  },
+  text1: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 16,
+    textDecorationLine: 'underline',
+    marginTop: 20,
+  },
+  baseText: {
+    color: 'white',
+    fontSize: 16,
+    marginVertical: 5,
+  },
+  textCenter: {
+    textAlign: 'center',
+  },
+  textBold: {
+    fontWeight: 'bold',
+  },
+  textItalic: {
+    fontStyle: 'italic',
+  },
+  textUnderline: {
+    textDecorationLine: 'underline',
+  },
+  textBlue: {
+    color: 'lightblue',
+  },
+  textOrange: {
+    color: 'orange',
+  },
+  textGreen: {
+    color: 'green',
+  },
+  textGold: {
+    color: 'gold',
+  },
+  textRight: {
+    textAlign: 'right',
   },
 });
