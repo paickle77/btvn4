@@ -1,89 +1,118 @@
-import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  Modal,
+  Alert,
+  Pressable,
+  StyleSheet,
+  BackHandler,
+} from 'react-native';
 
-export default function ViewComponent() {
+const App = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  // Hàm xử lý khi nhấn nút Back
+  const handleBackPress = () => {
+    if (modalVisible) {
+      Alert.alert('Thông báo', 'Bạn đã tắt modal bằng nút back của thiết bị', [
+        { text: 'OK', onPress: () => setModalVisible(false) },
+      ]);
+      return true; // Chặn hành động mặc định của nút Back
+    }
+    return false; // Tiếp tục hành động mặc định nếu modal không hiển thị
+  };
+
+  React.useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackPress
+    );
+
+    return () => backHandler.remove(); // Cleanup khi component bị hủy
+  }, [modalVisible]);
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <Text style={styles.baseText}>
-          Em vào đời bằng{' '}
-          <Text style={[styles.textBold, { color: 'red' }]}>vang đỏ</Text>, anh vào đời bằng{' '}
-          <Text style={[styles.textBold, { color: 'yellow' }]}>nước trà</Text>.
-        </Text>
-        <Text style={[styles.baseText, styles.textCenter]}>
-          Bằng cơn mưa thơm{' '}
-          <Text style={[styles.textItalic, { fontSize: 20 }]}>mùi đất</Text>,{' '}
-          <Text style={[{ fontSize: 10 }]}>bằng hoa dại mọc trước nhà.</Text>
-        </Text>
+    <View style={styles.container}>
+      <Pressable
+        style={[styles.button, styles.buttonOpen]}
+        onPress={() => setModalVisible(true)}>
+        <Text style={styles.textStyle}>Mở Modal</Text>
+      </Pressable>
 
-        <Text style={[styles.baseText, styles.textCenter]}>
-          Em vào đời bằng kế hoạch, anh vào đời bằng <Text style={styles.textBold}>mộng mơ</Text>.
-        </Text>
-        <Text style={[styles.baseText, styles.textCenter]}>
-          Lý trí em là <Text style={[styles.textUnderline, { letterSpacing: 2 }]}>công cụ</Text>,{' '}
-          còn trái tim anh là <Text style={[styles.textUnderline, { letterSpacing: 2 }]}>động cơ</Text>.
-        </Text>
-        <Text style={[styles.baseText, styles.textRight]}>
-          Em vào đời nhiều đồng nghiệp, anh vào đời nhiều thân tình.
-        </Text>
-        <Text style={[styles.baseText, styles.textBold, styles.textCenter, styles.textOrange]}>
-          Anh chỉ muốn chân mình đạp đất, không muốn đạp ai dưới chân mình.
-        </Text>
-        <Text style={[styles.baseText, styles.textCenter]}>
-          Em vào đời bằng <Text style={styles.textBlue}>mây trắng</Text>, em vào đời bằng{' '}
-          <Text style={styles.textOrange}>nắng xanh</Text>.
-        </Text>
-        <Text style={[styles.baseText, styles.textCenter]}>
-          Em vào đời bằng <Text style={styles.textGreen}>đại lộ</Text> và con đường đời{' '}
-          <Text style={styles.textGold}>vầng ánh</Text>.
-        </Text>
-      </View>
-    </SafeAreaView>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert(
+            'Thông báo',
+            'Bạn đã tắt modal bằng nút back của thiết bị',
+            [{ text: 'OK', onPress: () => setModalVisible(false) }]
+          );
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Hello World!</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(false)}>
+              <Text style={styles.textStyle}>Ẩn Modal</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: 'blue',
-  },
   container: {
     flex: 1,
-    backgroundColor: 'blue',
-    padding: 20,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  baseText: {
-    color: 'white',
-    fontSize: 16,
-    marginVertical: 5,
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
-  textCenter: {
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#34C759',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
     textAlign: 'center',
   },
-  textBold: {
-    fontWeight: 'bold',
-  },
-  textItalic: {
-    fontStyle: 'italic',
-  },
-  textUnderline: {
-    textDecorationLine: 'underline',
-  },
-  textBlue: {
-    color: 'lightblue',
-  },
-  textOrange: {
-    color: 'orange',
-  },
-  textGreen: {
-    color: 'green',
-  },
-  textGold: {
-    color: 'gold',
-  },
-  textRight: {
-    textAlign: 'right',
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
+
+export default App;
